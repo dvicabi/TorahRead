@@ -1,11 +1,9 @@
-from auth import get_youtube_service
-from hebcal import get_next_shabbat_info
-from scheduler import get_scheduled_time, parasha_title
-from youtube_uploader import upload_video, create_playlist
-from utils import collect_files, load_description_template
-from datetime import datetime, timedelta
-
-
+from auth.auth import get_youtube_service
+from hebcal.hebcal import get_next_shabbat_info
+from scheduler.scheduler import get_scheduled_time, parasha_title
+from uploader.youtube_uploader import upload_video, create_playlist
+from utils.utils import collect_files, load_description_template
+from datetime import datetime
 
 
 def main():

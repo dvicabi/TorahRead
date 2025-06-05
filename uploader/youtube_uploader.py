@@ -1,6 +1,6 @@
 from googleapiclient.http import MediaFileUpload
-from scheduler import convert_to_utc
-from utils import log_error
+from scheduler.scheduler import convert_to_utc
+from utils.utils import log_error
 from datetime import datetime
 
 
