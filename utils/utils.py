@@ -1,7 +1,7 @@
 import os
 from glob import glob
 from datetime import datetime
-from config import VIDEO_DIR, THUMBNAIL_EXT, VIDEO_EXT
+from config.config import VIDEO_DIR, THUMBNAIL_EXT, VIDEO_EXT
 
 
 def collect_files():

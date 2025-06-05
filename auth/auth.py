@@ -3,7 +3,8 @@ import pickle
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from config import SCOPES
+from config.config import SCOPES
+
 
 def get_youtube_service():
     creds = None  # הגדרת משתנה הרשאות
