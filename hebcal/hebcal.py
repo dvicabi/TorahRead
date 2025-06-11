@@ -11,25 +11,29 @@ def convert_to_hebrew_date(gregorian_date):
     return data.get("hebrew")
 
 def get_next_shabbat_info():
-    today = datetime.today()
-    sunday = today + timedelta(days=(6 - today.weekday()) % 7 + 1)  # יום ראשון הבא
-    shabbat = sunday + timedelta(days=6)  # שבת שאחריו
+    today = datetime.today()  # קבלת התאריך של היום הנוכחי
 
-    start_date = sunday.strftime("%Y-%m-%d")
-    end_date = shabbat.strftime("%Y-%m-%d")
+    # חישוב כמה ימים נשארו לשבת הקרובה (5 = שבת)
+    days_until_this_shabbat = (5 - today.weekday()) % 7
+    this_shabbat = today + timedelta(days=days_until_this_shabbat)  # קבלת תאריך השבת הקרובה
 
-    # בקשת פרשת השבוע מתוך Hebcal API
+    next_shabbat = this_shabbat + timedelta(days=7)  # הוספת 7 ימים – לקבל את שבת הבאה, שאותה נרצה לתזמן
+
+    start_date = next_shabbat.strftime("%Y-%m-%d")  # הפורמט הלועזי לתאריך השבת הבאה
+    end_date = next_shabbat.strftime("%Y-%m-%d")    # משתמשים באותו תאריך גם להתחלה וגם לסיום – כדי לדייק בחיפוש הפרשה
+
+    # קריאה ל־Hebcal כדי לקבל את פרשת השבוע עבור אותה שבת
     url = f"https://www.hebcal.com/hebcal/?v=1&cfg=json&maj=on&ss=on&mf=on&c=on&geo=il&m=50&s=on&start={start_date}&end={end_date}"
-    response = requests.get(url)
-    data = response.json()
+    response = requests.get(url)  # שליחת הבקשה
+    data = response.json()  # המרת התשובה ל־JSON
 
-    for item in data.get("items", []):
-        if item.get("category") == "parashat":
-            hebrew_date = convert_to_hebrew_date(shabbat)
+    for item in data.get("items", []):  # מעבר על כל האירועים שהוחזרו
+        if item.get("category") == "parashat":  # מציאת האירוע שהוא פרשת השבוע
+            hebrew_date = convert_to_hebrew_date(next_shabbat)  # המרת התאריך לשבת לעברית
             return {
-                "parasha_he": item["hebrew"],
-                "date_he": hebrew_date,
-                "date_en": shabbat.strftime("%Y-%m-%d")
+                "parasha_he": item["hebrew"],  # שם הפרשה בעברית
+                "date_he": hebrew_date,        # התאריך העברי של השבת
+                "date_en": next_shabbat.strftime("%Y-%m-%d")  # התאריך הלועזי
             }
 
-    return None
+    return None  # אם לא נמצאה פרשה, מחזיר None

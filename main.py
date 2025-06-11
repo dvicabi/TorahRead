@@ -19,6 +19,7 @@ def main():
     hebrew_date = shabbat_info["date_he"]  # תאריך עברי
     english_date = shabbat_info["date_en"]  # תאריך לועזי
     sunday = datetime.strptime(english_date, "%Y-%m-%d")  # מוצ"ש הוא "יום ראשון" לצורך תזמון
+    print(f"📅 מתוזמן עבור פרשת {parasha} בשבת {english_date} ({hebrew_date})")
 
     playlist_title = f"{parasha} – בנוסח מרוקאי {hebrew_date} ({english_date})"  # שם הפלייליסט
     playlist_description = f"קריאה בתורה {parasha}, שבוע {hebrew_date}, {english_date}."  # תיאור הפלייליסט
