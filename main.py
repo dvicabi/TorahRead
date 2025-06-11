@@ -3,8 +3,7 @@ from hebcal.hebcal import get_next_shabbat_info
 from scheduler.scheduler import get_scheduled_time, parasha_title
 from uploader.youtube_uploader import upload_video, create_playlist
 from utils.utils import collect_files, load_description_template
-from datetime import datetime
-
+from datetime import datetime, timedelta
 
 def main():
     print("🚀 Running main script...")
@@ -18,7 +17,12 @@ def main():
     parasha = shabbat_info["parasha_he"]  # שם הפרשה בעברית
     hebrew_date = shabbat_info["date_he"]  # תאריך עברי
     english_date = shabbat_info["date_en"]  # תאריך לועזי
-    sunday = datetime.strptime(english_date, "%Y-%m-%d")  # מוצ"ש הוא "יום ראשון" לצורך תזמון
+    # 📌 אנחנו רוצים שהתזמון יהיה עבור יום ראשון הקרוב ולא עבור תאריך השבת (english_date)
+    # 📅 לכן נחשב את יום ראשון הקרוב מהיום הנוכחי
+    days_until_sunday = (6 - datetime.today().weekday()) % 7  # יום ראשון הבא
+    sunday = datetime.today() + timedelta(days=days_until_sunday)
+    sunday = sunday.replace(hour=8, minute=0, second=0, microsecond=0)  # קביעת שעת בסיס
+
     print(f"📅 מתוזמן עבור פרשת {parasha} בשבת {english_date} ({hebrew_date})")
 
     playlist_title = f"{parasha} – בנוסח מרוקאי {hebrew_date} ({english_date})"  # שם הפלייליסט
