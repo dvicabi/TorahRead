@@ -19,7 +19,7 @@ def collect_files():
 
 
 def load_description_template(parasha, hebrew_date, english_date):
-    with open("default_description.txt", encoding="utf-8") as f:
+    with open("templates/default_description.txt", encoding="utf-8") as f:
         template = f.read()
     return (
         template.replace("{parasha}", parasha)
