@@ -98,8 +98,9 @@ def upload_video(youtube, file_path, title, description, scheduled_time, playlis
     with open("upload_success.log", "a", encoding="utf-8") as log:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log.write(f"[{timestamp}] הועלה בהצלחה: {title} ({video_id})\n")
+        log.write(f"    https://youtu.be/{video_id}\n")
 
-
+    return video_id
 
 
 def create_playlist(youtube, title, description):

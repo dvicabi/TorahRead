@@ -34,3 +34,37 @@ def log_error(message, exception):
     print(error_message)  # הדפסה לקונסול
     with open("upload_errors.log", "a", encoding="utf-8") as f:
         f.write(error_message)
+
+
+# utils.py  (הוסף בסוף הקובץ)
+def generate_social_text(parasha, hebrew_date, english_date,
+                         playlist_url, mphtir_url, parasha_url,
+                         whatsapp_url="https://chat.whatsapp.com/LKPdjJgSdxZ4Hu8M4R1pvj",
+                         channel_sub_url="https://www.youtube.com/@YourChannel?sub_confirmation=1"):
+    from pathlib import Path
+    with open("templates/social_share_template.txt", encoding="utf-8") as f:
+        template = f.read()
+
+    text = (template
+            .replace("{parasha}", parasha)
+            .replace("{playlist_url}", playlist_url)
+            .replace("{mphtir_url}", mphtir_url)
+            .replace("{parasha_url}", parasha_url)
+            .replace("{hebrew_date}", hebrew_date)
+            .replace("{english_date}", english_date)
+            .replace("{whatsapp_url}", whatsapp_url)
+            .replace("{channel_sub_url}", channel_sub_url)
+            .replace("{parasha_hash}", parasha.replace(' ', '')))
+
+    Path("text_file_send_facebook_whatsapp.txt").write_text(text, encoding="utf-8")
+    Path("text_torah_file.txt").write_text(text, encoding="utf-8")  # ← עדכון גם של הקובץ המקורי
+
+    try:
+        import pyperclip
+        pyperclip.copy(text)
+    except ImportError:
+        print("ℹ️ להתקן העתקה אוטומטית ללוח, הפעל: pip install pyperclip")
+
+    print("📄 נוצר text_file_send_facebook_whatsapp.txt והועתק ללוח.")
+
+

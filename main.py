@@ -2,7 +2,7 @@ from auth.auth import get_youtube_service
 from hebcal.hebcal import get_next_shabbat_info
 from scheduler.scheduler import get_scheduled_time, parasha_title
 from uploader.youtube_uploader import upload_video, create_playlist
-from utils.utils import collect_files, load_description_template
+from utils.utils import collect_files, load_description_template, generate_social_text
 from datetime import datetime, timedelta
 
 def main():
@@ -31,6 +31,9 @@ def main():
 
     files = collect_files()  # איסוף כל הקבצים לתזמון
     print("📁 קבצים שנמצאו:", files)
+
+    links = {}
+
     for index, video_path, thumb_path in files:
         scheduled = get_scheduled_time(index, sunday)  # קביעת שעת התזמון
         if not scheduled:
@@ -38,7 +41,16 @@ def main():
 
         title = parasha_title(english_date, hebrew_date, index, parasha)
         description = load_description_template(parasha, hebrew_date, english_date)
-        upload_video(youtube, video_path, title, description, scheduled, playlist_id, thumb_path)  # העלאה בפועל
+        video_id = upload_video(youtube, video_path, title, description, scheduled, playlist_id, thumb_path)  # העלאה בפועל
+
+        links[index] = f"https://youtu.be/{video_id}"
+
+    playlist_url = f"https://www.youtube.com/playlist?list={playlist_id}"
+    mphtir_url = links.get(8, "")
+    parasha_url = links.get(9, "")
+
+    generate_social_text(parasha, hebrew_date, english_date, playlist_url, mphtir_url, parasha_url)
+
 
 if __name__ == "__main__":
     main()
