@@ -15,18 +15,19 @@ def main():
         return  # יציאה אם אין פרשה
 
     parasha = shabbat_info["parasha_he"]  # שם הפרשה בעברית
-    hebrew_date = shabbat_info["date_he"]  # תאריך עברי
+    hebrew_date = shabbat_info["hebrew_year"]  # תאריך עברי
     english_date = shabbat_info["date_en"]  # תאריך לועזי
+    gregorian_year = shabbat_info["gregorian_year"]
     # 📌 אנחנו רוצים שהתזמון יהיה עבור יום ראשון הקרוב ולא עבור תאריך השבת (english_date)
     # 📅 לכן נחשב את יום ראשון הקרוב מהיום הנוכחי
     days_until_sunday = (6 - datetime.today().weekday()) % 7  # יום ראשון הבא
     sunday = datetime.today() + timedelta(days=days_until_sunday)
     sunday = sunday.replace(hour=8, minute=0, second=0, microsecond=0)  # קביעת שעת בסיס
 
-    print(f"📅 מתוזמן עבור פרשת {parasha} בשבת {english_date} ({hebrew_date})")
+    print(f"📅 מתוזמן עבור {parasha} בשבת {gregorian_year} - {hebrew_date}")
 
-    playlist_title = f"{parasha} – בנוסח מרוקאי {hebrew_date} ({english_date})"  # שם הפלייליסט
-    playlist_description = f"קריאה בתורה {parasha}, שבוע {hebrew_date}, {english_date}."  # תיאור הפלייליסט
+    playlist_title = f"{parasha} – בנוסח מרוקאי + תיקון קוראים - {hebrew_date} - {gregorian_year}"  # שם הפלייליסט
+    playlist_description = f"קריאה בתורה פרשת {parasha}, שבוע {hebrew_date} - {gregorian_year}."  # תיאור הפלייליסט
     playlist_id = create_playlist(youtube, playlist_title, playlist_description)  # יצירת פלייליסט ביוטיוב
 
     files = collect_files()  # איסוף כל הקבצים לתזמון
@@ -39,8 +40,8 @@ def main():
         if not scheduled:
             continue
 
-        title = parasha_title(english_date, hebrew_date, index, parasha)
-        description = load_description_template(parasha, hebrew_date, english_date)
+        title = parasha_title(gregorian_year, hebrew_date, index, parasha)
+        description = load_description_template(parasha, hebrew_date, gregorian_year)
         video_id = upload_video(youtube, video_path, title, description, scheduled, playlist_id, thumb_path)  # העלאה בפועל
 
         links[index] = f"https://youtu.be/{video_id}"

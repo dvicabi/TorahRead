@@ -22,20 +22,20 @@ def convert_to_utc(dt_local):
 
 def parasha_title(english_date, hebrew_date, index, parasha):
     aliquot = [
-        "עלייה ראשונה",
-        "עלייה שנייה",
-        "עלייה שלישית",
-        "עלייה רביעית",
-        "עלייה חמישית",
-        "עלייה שישית",
-        "עלייה שביעית"
+        "עליית ראשון",
+        "עליית שני",
+        "עליית שלישי",
+        "עליית רביעי",
+        "עליית חמישי",
+        "עליית שישי",
+        "עליית שביעי"
     ]
 
     if index <= 7:
         aliyah_name = aliquot[index - 1]
-        title = f"{parasha} {aliyah_name} בנוסח יהדות מרוקו - {hebrew_date} ({english_date})"
+        title = f"{parasha} {aliyah_name} בנוסח יהדות מרוקו + תיקון קוראים - {hebrew_date} - {english_date}"
     elif index == 8:
-        title = f"מפטיר הפטרה {parasha} בנוסח יהדות מרוקו - {hebrew_date} ({english_date})"
+        title = f"מפטיר הפטרה {parasha} בנוסח יהדות מרוקו + תיקון קוראים {hebrew_date} - {english_date}"
     else:
-        title = f"{parasha} בנוסח יהדות מרוקו - {hebrew_date} ({english_date})"
+        title = f"{parasha} בנוסח יהדות מרוקו + תיקון קוראים {hebrew_date} - {english_date}"
     return title
