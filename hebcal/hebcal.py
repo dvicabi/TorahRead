@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime, timedelta
+import re
 
 def convert_to_hebrew_date(gregorian_date):
     """המרת תאריך לועזי לעברי באמצעות Hebcal"""
@@ -40,6 +41,10 @@ def get_next_shabbat_info():
             # נטרול המילה "פרשת " רק אם קיימת
             name = item["hebrew"]
             parasha_name = name[5:] if name.startswith("פרשת ") else name
+
+            # הסרת מקפים מכל סוג משם הפרשה
+            parasha_name = re.sub(r"[-–—־]", "", parasha_name).strip()
+            parasha_name = re.sub(r"\s+", " ", parasha_name)
 
             return {
                 "parasha_he": parasha_name,  # שם הפרשה בלבד
